@@ -1,0 +1,34 @@
+{
+  "expo": {
+    "name": "tong-setan",
+    "slug": "tong-setan",
+    "version": "1.0.0",
+    "scheme": "tong-setan",
+    "orientation": "portrait",
+    "icon": "./assets/images/splash.jpg",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/images/splashs.png",
+      "resizeMode": "cover",
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      }
+    },
+    "web": {
+      "favicon": "./assets/images/favicon.png"
+    },
+    "plugins": [
+      "expo-router"
+    ]
+  }
+}
