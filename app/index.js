@@ -4,9 +4,9 @@ import { CommonActions } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Text, BottomNavigation } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import HomeScreen from './homeScreen';
+import HomeScreen from './home/homeScreen';
 import { color } from '@rneui/base';
-import ProfileScreen from './profileScreen';
+import ProfileScreen from './home/profileScreen';
 
 const Tab = createBottomTabNavigator();
 

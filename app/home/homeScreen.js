@@ -1,7 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 import { Text } from 'react-native-paper';
-import homeStyles from './styles/homeStyles';
+import homeStyles from '../styles/homeStyles';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 
