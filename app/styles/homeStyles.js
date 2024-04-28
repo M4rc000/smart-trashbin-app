@@ -25,7 +25,7 @@ const homeStyles = () => {
       flex: 1, 
     },
     rightTextContainer: {
-      marginLeft: 'auto', // Push to the right as much as possible
+      marginLeft: 'auto',
     },
 
     // PROFILE
@@ -52,6 +52,10 @@ const homeStyles = () => {
       width: 50,
       alignSelf: 'center'
     },
+    containerList:{
+      margin: '5%',
+      marginTop: '2%'
+    }
   });
   return styles;
 };

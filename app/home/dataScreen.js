@@ -1,29 +1,24 @@
-import React, {useState} from 'react';
-import { Image, TouchableOpacity, View, Text } from 'react-native';
-import { Modal, Portal, Button, Card } from 'react-native-paper';
+import React from 'react';
+import { View, Image, TouchableOpacity } from 'react-native';
+import { Text, Card } from 'react-native-paper';
 import homeStyles from '../styles/homeStyles';
-import { MaterialCommunityIcons, AntDesign } from '@expo/vector-icons';
+import { MaterialIcons, SimpleLineIcons, Ionicons, AntDesign } from '@expo/vector-icons';
 
-function HomeScreen() {
-    const styles = homeStyles();
+const hero = require('./../../assets/images/man.jpg');
+
+function DataScreen() {
     return (
-        <View style={styles.container}>
-            <View style={styles.containerHeader}>
-                <View style={styles.leftTextContainer}>
-                    <Text style={{ fontSize: 20 }}>Welcome <Text style={{ color: '#1F41BB' }}>Prime</Text></Text>
-                </View>
-                <View style={styles.rightTextContainer}>
-                    <TouchableOpacity>
-                        <Text><MaterialCommunityIcons name="bell" size={24} color="#1F41BB" /></Text>
-                    </TouchableOpacity>
-                </View>
+        <View>
+            <View style={{ backgroundColor: '#1F41BB' }}>
+                <Text style={{ color: 'white', margin: '5%', fontSize: 15, fontWeight: '900' }}>
+                    Notifications
+                </Text>
             </View>
-            <Text style={{ marginLeft: '6%', marginTop: '12%', fontWeight: '700', fontSize: 15 }}>Current notification</Text>
             <View style={{ marginTop: '1%', alignItems: 'center' }}>
                 <Card style={{ width: '89%', marginTop: '3%'}}>
                     <Card.Content>
                         <View style={{  flexDirection: 'row', justifyContent: 'flex-start', gap: 200}}>
-                        <Text variant="bodyMedium"><Text style={{ fontWeight: '800' }}>Trash Bin 001</Text> | Lt. 1 A001</Text>
+                            <Text variant="bodyMedium"><Text style={{ fontWeight: '800' }}>Trash Bin 001</Text> | Lt. 1 A001</Text>
                         </View>
                     </Card.Content>
                 </Card>
@@ -41,7 +36,7 @@ function HomeScreen() {
                 <Card style={{ width: '89%', marginTop: '3%'}}>
                     <Card.Content>
                         <View style={{  flexDirection: 'row', justifyContent: 'flex-start', gap: 200}}>
-                            <Text variant="bodyMedium"><Text style={{ fontWeight: '800' }}>Trash Bin 001</Text> | Lt. 1 A002</Text>
+                            <Text variant="bodyMedium"><Text style={{ fontWeight: '800' }}>Trash Bin 001</Text> | Lt. 1 A003</Text>
                         </View>
                     </Card.Content>
                 </Card>
@@ -50,4 +45,4 @@ function HomeScreen() {
     );
 }
 
-export default HomeScreen;
+export default DataScreen;

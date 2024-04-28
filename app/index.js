@@ -1,111 +1,44 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
-import { CommonActions } from '@react-navigation/native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Text, BottomNavigation } from 'react-native-paper';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import HomeScreen from './home/homeScreen';
+import { Link, router } from 'expo-router';
+import { View, Text, Image, ImageBackground, TouchableOpacity } from 'react-native';
+import authStyles from './styles/authStyles.js';
+import { Ionicons } from '@expo/vector-icons';
 import { color } from '@rneui/base';
-import ProfileScreen from './home/profileScreen';
+import { Button } from '@rneui/themed';
 
-const Tab = createBottomTabNavigator();
+const welcomeScreen = require('./../assets/images/welcomeScreen.png');
+const welcomeImage = require('../assets/images/welcome.png');
+const styles = authStyles();
 
-export default function MyComponent() {
+export default function index() {
+  const login = () => {
+    router.navigate('/auth/login');
+  }
+  const register = () => {
+    router.navigate('/auth/register');
+  }
   return (
-    <Tab.Navigator
-    screenOptions={{
-      headerShown: false,
-    }}
-    tabBar={({ navigation, state, descriptors, insets }) => (
-      <BottomNavigation.Bar
-        navigationState={state}
-        safeAreaInsets={insets}
-        style={{ backgroundColor: '#1F41BB', height: 55}} 
-        onTabPress={({ route, preventDefault }) => {
-          const event = navigation.emit({
-            type: 'tabPress',
-            target: route.key,
-            canPreventDefault: true,
-          });
-
-          if (event.defaultPrevented) {
-            preventDefault();
-          } else {
-            navigation.dispatch({
-              ...CommonActions.navigate(route.name, route.params),
-              target: state.key,
-            });
-          }
-        }}
-        renderIcon={({ route, focused, color }) => {
-          const { options } = descriptors[route.key];
-          if (options.tabBarIcon) {
-            return options.tabBarIcon({ focused, color, size: 24 });
-          }
-
-          return null;
-        }}
-        getLabelText={({ route }) => {
-          const { options } = descriptors[route.key];
-          const label =
-            options.tabBarLabel !== undefined
-              ? options.tabBarLabel
-              : options.title !== undefined
-              ? options.title
-              : route.title;
-          return label;
-        }}
-      />
-    )}
-  >
-    <Tab.Screen
-      name="Home"
-      component={HomeScreen}
-      options={{
-        // tabBarLabel: 'Home',
-        tabBarLabelStyle: { color: '#1F41BB' },
-        tabBarIcon: ({ color, size, focused }) => {
-          return <Icon name="home" size={size} color={focused ? '#1F41BB' : 'white'} />;
-        },
-      }}
-    />
-    <Tab.Screen
-      name="Settings"
-      component={SettingsScreen}
-      options={{
-        // tabBarLabel: 'Settings',
-        tabBarIcon: ({ color, size, focused }) => {
-          return <Icon name="cog" size={size} color={focused ? '#1F41BB' : 'white'} />;
-        },
-      }}
-    />
-    <Tab.Screen
-      name="Profile"
-      component={ProfileScreen}
-      options={{
-        // tabBarLabel: 'Profile',
-        // if tabBarIcon is active icon color change to be #1F41BB
-        tabBarIcon: ({ color, size, focused }) => {
-          return <Icon name="account-circle" size={25} color={focused ? '#1F41BB' : 'white'} />;
-        },
-      }}
-    />
-    </Tab.Navigator>
+    <ImageBackground style={styles.container} source={welcomeScreen}>
+      <View style={styles.containerImage}>
+        <Image style={{ width: '75%', height: '75%', marginTop: '3%' }} source={welcomeImage}></Image>
+      </View>
+      <View style={styles.panel}>
+        <Text style={styles.headerText}>Revolutionize Waste</Text>
+        <Text style={styles.headerText}>Management With Us</Text>
+      </View>
+      <View style={styles.containerButton}>
+        <Button
+          title={'Login'}
+          containerStyle={{
+            width: 100,
+          }}
+          buttonStyle={{ 
+            borderRadius: 10,
+            backgroundColor: '#1F41BB',
+          }}
+          onPress={login}
+        />
+      </View>
+    </ImageBackground>
   );
 }
-
-function SettingsScreen() {
-  return (
-    <View style={styles.container}>
-      <Text variant="headlineMedium">Settings!</Text>
-    </View>
-  );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-});

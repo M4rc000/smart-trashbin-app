@@ -11,13 +11,46 @@ const welcomeImage = require('../../assets/images/welcome.png');
 const styles = authStyles();
 
 export default function login() {
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [secureTextEntry, setSecureTextEntry] = useState(true);
-  const toggleSecureEntry = () => {
-    setSecureTextEntry(!secureTextEntry);
-  };
+
+  // const login = async (username, password) => {
+  //   console.log(username);
+  //   console.log(password);
+  //   const url = 'http://localhost/smart-trashbin/user/'; // Assuming this is the correct endpoint for logging in
+  
+  //   try {
+  //     const response = await fetch(url, {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify({ username, password }),
+  //     });
+  
+  //     if (response.ok) {
+  //       // Login successful
+  //       const responseData = await response.json();
+  //       // Assuming the server returns a token upon successful login
+  //       const token = responseData.token;
+  //       console.log('Login successful');
+  //       // Perform navigation here or store the token in localStorage
+  //       // Example: localStorage.setItem('token', token);
+  //     } else {
+  //       // Login failed
+  //       const errorData = await response.json();
+  //       console.error('Login failed:', errorData.message); // Assuming the server returns an error message
+  //     }
+  //   } catch (error) {
+  //     console.error('Error during login:', error);
+  //   }
+  // }
+
+  // Usage example:
+
+
   const login = () => {
-    router.navigate('/home');
+    router.navigate('./../home');
   }
   return (
     <ImageBackground style={styles.container} source={welcomeScreen}>
@@ -28,19 +61,17 @@ export default function login() {
       <View style={styles.panelContainer}>
         <TextInput
           mode="outlined"
-          label="Email"
+          label="Username"
           style={{ width: 300 }}
+          value={username}
+          onChangeText={text => setUsername(text)}
         />
         <TextInput
           mode="outlined"
           label="Password"
-          secureTextEntry={secureTextEntry}
           style={{ width: 300, marginTop: '5%' }}
-          right={
-            <TouchableOpacity onPress={toggleSecureEntry}>
-                <Text name={secureTextEntry ? <SimpleLineIcons name="eye" size={24} color="black" /> : <FontAwesome5 name="eye-slash" size={24} color="black" /> }></Text>
-            </TouchableOpacity>
-          }
+          value={password}
+          onChangeText={text => setPassword(text)}
         />
       </View>
       <View style={styles.containerBtn}>
@@ -59,12 +90,6 @@ export default function login() {
           />
         </Link>
       </View>
-      <Link href='http://google.com' style={{textAlign: 'center', marginTop: '-35%'}}>
-        <Text style={{ fontSize: 12, color: '#1F41BB', fontWeight: 500 }}>Forgot your password?</Text>
-      </Link>
-      <Link href='/auth/register' style={{textAlign: 'center', marginTop: '5%'}}>
-        <Text style={{ fontSize: 12, color: 'rgba(0,0,0,.8)', fontWeight: 500 }}>Create a new account</Text>
-      </Link>
     </ImageBackground>
   );
 }
