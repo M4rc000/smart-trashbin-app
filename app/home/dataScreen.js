@@ -1,10 +1,6 @@
 import React from 'react';
-import { View, Image, TouchableOpacity } from 'react-native';
+import { View } from 'react-native';
 import { Text, Card } from 'react-native-paper';
-import homeStyles from '../styles/homeStyles';
-import { MaterialIcons, SimpleLineIcons, Ionicons, AntDesign } from '@expo/vector-icons';
-
-const hero = require('./../../assets/images/man.jpg');
 
 function DataScreen() {
     return (

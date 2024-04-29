@@ -1,9 +1,7 @@
 import React from 'react';
-import { Link, router } from 'expo-router';
-import { View, Text, Image, ImageBackground, TouchableOpacity } from 'react-native';
+import { router } from 'expo-router';
+import { View, Text, Image, ImageBackground } from 'react-native';
 import authStyles from './styles/authStyles.js';
-import { Ionicons } from '@expo/vector-icons';
-import { color } from '@rneui/base';
 import { Button } from '@rneui/themed';
 
 const welcomeScreen = require('./../assets/images/welcomeScreen.png');
@@ -14,9 +12,7 @@ export default function index() {
   const login = () => {
     router.navigate('/auth/login');
   }
-  const register = () => {
-    router.navigate('/auth/register');
-  }
+  
   return (
     <ImageBackground style={styles.container} source={welcomeScreen}>
       <View style={styles.containerImage}>

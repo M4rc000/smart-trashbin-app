@@ -1,10 +1,13 @@
-import React, {useState} from 'react';
-import { Image, TouchableOpacity, View, Text } from 'react-native';
-import { Modal, Portal, Button, Card } from 'react-native-paper';
+import React from 'react';
+import { TouchableOpacity, View, Text } from 'react-native';
+import { Card } from 'react-native-paper';
 import homeStyles from '../styles/homeStyles';
-import { MaterialCommunityIcons, AntDesign } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 function HomeScreen() {
+    console.log(AsyncStorage.getItem('username'));
     const styles = homeStyles();
     return (
         <View style={styles.container}>
