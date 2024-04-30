@@ -1,19 +1,37 @@
-import React from 'react';
-import { TouchableOpacity, View, Text } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, TouchableOpacity } from 'react-native';
 import { Card } from 'react-native-paper';
 import homeStyles from '../styles/homeStyles';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import capitalizeFirstLetter from '../functions';
 
 function HomeScreen() {
-    console.log(AsyncStorage.getItem('username'));
     const styles = homeStyles();
+    const [user, setUser] = useState(null);
+
+    useEffect(() => {
+        const getUserSession = async () => {
+            try {
+                const userSession = await AsyncStorage.getItem('userSession');
+                if (userSession !== null) {
+                    const parsedUser = JSON.parse(userSession);
+                    setUser(parsedUser);
+                    console.log(parsedUser);
+                } else {
+                    console.log('User session not found');
+                }
+            } catch (error) {
+                console.error('Error retrieving user session:', error);
+            }
+        };
+        getUserSession();
+    }, []);
     return (
         <View style={styles.container}>
             <View style={styles.containerHeader}>
                 <View style={styles.leftTextContainer}>
-                    <Text style={{ fontSize: 20 }}>Welcome <Text style={{ color: '#1F41BB' }}>Prime</Text></Text>
+                    <Text style={{ fontSize: 20 }}>Welcome <Text style={{ color: '#1F41BB' }}>{user ? capitalizeFirstLetter(user.username) : ''}</Text></Text>
                 </View>
                 <View style={styles.rightTextContainer}>
                     <TouchableOpacity>

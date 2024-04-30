@@ -1,58 +1,79 @@
 import React, {useState} from 'react';
-import {Link, router} from 'expo-router';
+import { router } from 'expo-router';
 import { View, Text, ImageBackground } from 'react-native';
 import authStyles from '../styles/authStyles.js';
 import { Button } from '@rneui/themed';
 import { TextInput } from 'react-native-paper'; 
-import { v4 as uuidv4 } from 'uuid';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const welcomeScreen = require('../../assets/images/welcomeScreen.png');
 const styles = authStyles();
-
 export default function login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  function generateSessionToken() {
-    return uuidv4();
-  } 
-  const login = () => {
+  
+  async function signIn() {
     const userData = { username, password };
-    
-    fetch("http://192.168.1.100/smart-trashbin/user/", {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(userData)
-    })
-    .then((res) => {
-      if (!res.ok) {
+    try {
+      const response = await fetch("http://192.168.1.102/smart-trashbin/user/", {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(userData)
+      });
+      
+      if (!response.ok) {
         throw new Error('Network response was not ok');
       }
-      return res.json();
-    })
-    .then(resJson => {
-      // Check if there is a user with the provided username and password
+      
+      const resJson = await response.json();
       const user = resJson.find(user => user.username === username && user.password === password);
+      
       if (user) {
-        // Redirect to home page
+        // Store user session data in AsyncStorage
+        await AsyncStorage.setItem('userSession', JSON.stringify(user));
         router.navigate('/home');
-        // Generate a session token (you may use a library for this purpose)
-        const sessionToken = generateSessionToken(); // Replace generateSessionToken() with your actual function to generate a session token
-        // Store the session token in local storage
-        AsyncStorage.setItem('sessionToken', sessionToken);
-        AsyncStorage.setItem('userId', user.user_id);
-        AsyncStorage.setItem('username', user.username); // Store username
       } else {
-          alert('Username or password is incorrect');
+        alert('Username or password is incorrect');
       }
-    })
-    .catch(e => { 
-      console.log(e);
-      return 'Login failed: ' + e.message;
-    });
-  }  
+    } catch (error) {
+      console.error('Login failed:', error);
+      return 'Login failed: ' + error.message;
+    }
+  }
+
+  // const login = () => {
+  //   const userData = { username, password };
+    
+  //   fetch("http://192.168.1.102/smart-trashbin/user/", {
+  //     method: 'POST',
+  //     headers: {
+  //       'Content-Type': 'application/json'
+  //     },
+  //     body: JSON.stringify(userData)
+  //   })
+  //   .then((res) => {
+  //     if (!res.ok) {
+  //       throw new Error('Network response was not ok');
+  //     }
+  //     return res.json();
+  //   })
+  //   .then(resJson => {
+  //     // Check if there is a user with the provided username and password
+  //     const user = resJson.find(user => user.username === username && user.password === password);
+  //     if (user) {
+  //       // Redirect to home page
+  //       router.navigate('/home');
+  //     } else {
+  //         alert('Username or password is incorrect');
+  //     }
+  //   })
+  //   .catch(e => { 
+  //     console.log(e);
+  //     return 'Login failed: ' + e.message;
+  //   });
+  // }  
 
   return (
     <ImageBackground style={styles.container} source={welcomeScreen}>
@@ -77,7 +98,6 @@ export default function login() {
           />
         </View>
       <View style={styles.containerBtn}>
-        <Link href="/auth/login">
           <Button
             title={'Login'}
             containerStyle={{
@@ -88,9 +108,8 @@ export default function login() {
             borderRadius: 10,
             backgroundColor: '#1F41BB',
             }}
-            onPress={login}
+            onPress={signIn}
           />
-        </Link>
       </View>
     </ImageBackground>
   );
