@@ -11,11 +11,18 @@ const hero = require('./../../assets/images/man.jpg');
 
 function ProfileScreen() {
     const styles = homeStyles();
-    const logout = () => {
-        router.navigate('/');
-    }
+    const logout = async () => {
+        try {
+            await AsyncStorage.removeItem('userSession');
+            // Reset user state
+            setUser(null);
+            // Navigate to the home screen or any other desired destination
+            router.navigate('/');
+        } catch (error) {
+            console.error('Error clearing user session:', error);
+        }
+    };
     const [user, setUser] = useState(null);
-
     useEffect(() => {
         const getUserSession = async () => {
             try {
@@ -33,6 +40,7 @@ function ProfileScreen() {
         };
         getUserSession();
     }, []);
+    
     return (
         <View style={styles.container}>
             <View style={styles.containerHero}>
