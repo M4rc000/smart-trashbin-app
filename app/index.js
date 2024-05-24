@@ -6,28 +6,26 @@ export default function Index() {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-      const getUserSession = async () => {
-          try {
-              const userSession = await AsyncStorage.getItem('userSession');
-              if (userSession !== null) {
-                const parsedUser = JSON.parse(userSession);
-                setUser(parsedUser);
-              } else {
-                console.log('User session not found');
-              }
-            } catch (error) {
-              console.error('Error retrieving user session:', error);
+    const getUserSession = async () => {
+        try {
+            const userSession = await AsyncStorage.getItem('userSession');
+            if (userSession !== null) {
+              const parsedUser = JSON.parse(userSession);
+              setUser(parsedUser);
+            } else {
+              // console.log('User session not found');
             }
-          };
-          getUserSession();
+          } catch (error) {
+            // console.error('Error retrieving user session:', error);
+          }
+    };
+    getUserSession();
   }, []);
 
-
-  if(!user){
-    return <Redirect href={'welcome'} />
+  if(!user || user == NULL || user == ''){
+    return <Redirect href={'./auth/login'} />
   }
   else{
     return <Redirect href={'./home'} />
   }
-}
-        
+}       

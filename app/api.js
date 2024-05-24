@@ -1,18 +1,23 @@
+const ip = '192.168.1.103';
+
 // GET USER
-const urlUser = "http://10.50.22.163/smart-trashbin/user/";
+const urlUser = `http://${ip}/smart-trashbin/user/`;
 
 // GET DATA TRASH BIN
-const urlData = "http://10.50.22.163/smart-trashbin/data/";
+const urlData = `http://${ip}/smart-trashbin/data/`;
 
 // GET DATA FULL
-const urlDataFull = "http://10.50.22.163/smart-trashbin/data/full/";
+const urlDataFull = `http://${ip}/smart-trashbin/data/full/`;
 
 // GET DATA MEDIUM
-const urlDataMedium = "http://10.50.22.163/smart-trashbin/data/medium/";
+const urlDataMedium = `http://${ip}/smart-trashbin/data/medium/`;
 
 // GET DATA EMPTY
-const urlDataEmpty = "http://10.50.22.163/smart-trashbin/data/empty/";
+const urlDataEmpty = `http://${ip}/smart-trashbin/data/empty/`;
+
+// GET DATA NOTIF
+const urlDataNotifFull = `http://${ip}/smart-trashbin/data/notif-full/`;
 
 export default apiUrl = {
-    urlData, urlUser, urlDataEmpty, urlDataFull, urlDataMedium
+    urlData, urlUser, urlDataEmpty, urlDataFull, urlDataMedium, urlDataNotifFull
 }

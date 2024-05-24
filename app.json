@@ -1,9 +1,9 @@
 {
   "expo": {
-    "name": "tong-setan",
-    "slug": "tong-setan",
+    "name": "Tong-setan",
+    "slug": "smart-trash-bin",
     "version": "1.0.0",
-    "scheme": "tong-setan",
+    "scheme": "Tong-setan",
     "orientation": "portrait",
     "icon": "./assets/images/splash.png",
     "userInterfaceStyle": "light",
@@ -33,11 +33,10 @@
       [
         "expo-notifications",
         {
-          "icon": "./local/assets/notification-icon.png",
+          "icon": "./assets/images/splash.png",
           "color": "#ffffff",
           "sounds": [
-            "./local/assets/notification-sound.wav",
-            "./local/assets/notification-sound-other.wav"
+            "./assets/sound/beebom.wav"
           ]
         }
       ]
@@ -47,8 +46,9 @@
         "origin": false
       },
       "eas": {
-        "projectId": "68f5d8cb-1c19-4f55-b155-8481ec89814d"
+        "projectId": "837ba0e0-1180-4418-b0d3-9076e1e0e414"
       }
-    }
+    },
+    "owner": "prime_10"
   }
 }

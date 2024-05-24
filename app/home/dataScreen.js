@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { View, StyleSheet } from 'react-native';
-import { Text, Card, SegmentedButtons } from 'react-native-paper';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet } from 'react-native';
+import { Card, SegmentedButtons } from 'react-native-paper';
 import apiUrl from './../api';
 
-
-function DataScreen() {
+const DataScreen = () => {
     const [trashData, setTrashData] = useState([]);
     const [value, setValue] = useState('');
 
@@ -25,29 +24,24 @@ function DataScreen() {
                 const response = await fetch(url, {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
                     },
                 });
 
                 if (!response.ok) {
-                    throw new Error('Failed to fetch data');
+                    // throw new Error(`HTTP error! status: ${response.status}`);
                 }
 
                 const resJson = await response.json();
                 setTrashData(resJson); // Set the fetched data to state
             } catch (error) {
-                console.error('Error getting data:', error);
+                // console.error('Error getting data:', error);
+                setTrashData([]); // Clear the data in case of an error
             }
         };
 
-        if (value !== '') {
+        if (value) {
             getDataTrash();
-            if(trashData){
-                console.log(trashData);
-            } 
-            else{
-                console.log(trashData);
-            }
         }
     }, [value]);
 
@@ -59,7 +53,6 @@ function DataScreen() {
             <View style={styles.segmentedButtonsContainer}>
                 <SegmentedButtons
                     value={value}
-                    style={styles.segmentedButtons}
                     onValueChange={setValue}
                     buttons={[
                         {
@@ -72,53 +65,59 @@ function DataScreen() {
                         },
                         {
                             value: 'full',
-                            label: 'Full'
+                            label: 'Full',
                         },
                     ]}
                 />
             </View>
-            {trashData.length > 0 && trashData.map((bin) => (
-                <View key={bin.nama} style={styles.cardContainer}>
-                    <Card style={styles.card}>
-                        <Card.Content>
-                            <Text style={styles.cardText}>{bin.nama} | {bin.level} {bin.location}</Text>
-                        </Card.Content>
-                    </Card>
-                </View>
-            ))}
+            {trashData.length > 0 ? (
+                trashData.map((bin) => (
+                    <View key={bin.nama} style={{marginTop: '1%', alignItems: 'center'}}>
+                        <Card style={{ width: '89%', marginTop: '3%' }}>
+                            <Card.Content>
+                                <View style={{  flexDirection: 'row', justifyContent: 'flex-start', gap: 200}}>
+                                    <Text variant="bodyMedium"><Text style={{ fontWeight: '800' }}>{bin.nama}</Text> |{bin.level} {bin.location}</Text>
+                                </View>
+                            </Card.Content>
+                        </Card>
+                    </View>
+                ))
+            ) : (
+                <Text style={styles.noDataText}>Data tidak ada</Text>
+            )}
         </View>
     );
-}
+};
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        padding: 16,
+        backgroundColor: '#f5f5f5',
     },
     header: {
-        backgroundColor: '#1F41BB',
-        padding: 16,
+        marginBottom: 16,
     },
     headerText: {
-        color: 'white',
-        fontSize: 15,
-        fontWeight: '900',
+        fontSize: 24,
+        fontWeight: 'bold',
     },
     segmentedButtonsContainer: {
-        alignItems: 'center',
-        marginTop: 20,
-    },
-    segmentedButtons: {
-        width: '90%',
+        marginBottom: 16,
     },
     cardContainer: {
-        marginTop: 10,
-        alignItems: 'center',
+        marginBottom: 16,
     },
     card: {
-        width: '89%',
+        padding: 16,
     },
     cardText: {
-        fontWeight: '800',
+        fontSize: 16,
+    },
+    noDataText: {
+        fontSize: 16,
+        textAlign: 'center',
+        marginTop: 16,
     },
 });
 

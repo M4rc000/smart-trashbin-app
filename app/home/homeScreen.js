@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, TouchableOpacity, Button, Platform } from 'react-native';
+import { View, Text, TouchableOpacity, Platform } from 'react-native';
 import { Card } from 'react-native-paper';
 import homeStyles from '../styles/homeStyles';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -8,32 +8,44 @@ import capitalizeFirstLetter from '../functions';
 import apiUrl from './../api';
 import * as Notifications from 'expo-notifications';
 import * as Device from 'expo-device';
+import Constants from 'expo-constants';
+
 
 function HomeScreen() {
     const styles = homeStyles();  
     
     const [trashData, setTrashData] = useState([]);
+    const [lastNotified, setLastNotified] = useState(null); // Track the last notification
+    const [user, setUser] = useState(null);
+
     useEffect(() => {
         const getDataTrash = async () => {
-        try {
-            const response = await fetch(apiUrl.urlData, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify()
-            });
-            
-            const resJson = await response.json();
-            setTrashData(resJson); // Set the fetched data to state
-        } catch (error) {
-            console.error('Error getting data:', error);
-        }
+            try {
+                const response = await fetch(apiUrl.urlDataNotifFull, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({})
+                });
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(`Network response was not ok: ${errorText}`);
+                }
+
+                const resJson = await response.json();
+                setTrashData(resJson);
+            } catch (error) {
+                console.error('Error getting data:', error);
+            }
         };
-        getDataTrash(); // Fetch data when component mounts
+
+        // Polling the server every 5 seconds for real-time updates
+        const intervalId = setInterval(getDataTrash, 5000);
+        return () => clearInterval(intervalId); // Clear interval on component unmount
     }, []);
-    
-    const [user, setUser] = useState(null);
+
     useEffect(() => {
         const getUserSession = async () => {
             try {
@@ -50,60 +62,74 @@ function HomeScreen() {
         };
         getUserSession();
     }, []);
-    
+
     Notifications.setNotificationHandler({
         handleNotification: async () => ({
-          shouldShowAlert: true,
-          shouldPlaySound: false,
-          shouldSetBadge: false,
+            shouldShowAlert: true,
+            shouldPlaySound: true,
+            shouldSetBadge: false,
         }),
     });
-    
+
     async function registerForPushNotificationsAsync() {
         let token;
-      
+    
         if (Platform.OS === 'android') {
-          await Notifications.setNotificationChannelAsync('default', {
-            name: 'default',
-            importance: Notifications.AndroidImportance.MAX,
-            vibrationPattern: [0, 250, 250, 250],
-            lightColor: '#FF231F7C',
-          });
+            await Notifications.setNotificationChannelAsync('default', {
+                name: 'default',
+                importance: Notifications.AndroidImportance.MAX,
+                vibrationPattern: [0, 250, 250, 250],
+                lightColor: '#FF231F7C',
+            });
         }
-      
+    
         if (Device.isDevice) {
-          const { status: existingStatus } = await Notifications.getPermissionsAsync();
-          let finalStatus = existingStatus;
-          if (existingStatus !== 'granted') {
-            const { status } = await Notifications.requestPermissionsAsync();
-            finalStatus = status;
-          }
-          if (finalStatus !== 'granted') {
-            alert('Failed to get push token for push notification!');
-            return;
-          }
-          // Learn more about projectId:
-          // https://docs.expo.dev/push-notifications/push-notifications-setup/#configure-projectid
-          token = (await Notifications.getExpoPushTokenAsync({ projectId: 'your-project-id' })).data;
-          console.log(token);
+            const { status: existingStatus } = await Notifications.getPermissionsAsync();
+            let finalStatus = existingStatus;
+            if (existingStatus !== 'granted') {
+                const { status } = await Notifications.requestPermissionsAsync();
+                finalStatus = status;
+            }
+            if (finalStatus !== 'granted') {
+                alert('Failed to get push token for push notification!');
+                return;
+            }
+            try {
+                const projectId = Constants.expoConfig?.extra?.eas?.projectId;
+                if (!projectId) {
+                    throw new Error('Project ID is not defined in the app configuration.');
+                }
+                token = (await Notifications.getExpoPushTokenAsync({ projectId })).data;
+                // console.log(token);
+            } catch (error) {
+                console.error('Error encountered while fetching Expo token:', error);
+            }
         } else {
-          alert('Must use physical device for Push Notifications');
+            alert('Must use physical device for Push Notifications');
         }
-      
+    
         return token;
     }
 
     useEffect(() => {
+        registerForPushNotificationsAsync();
+    }, []);
+
+    useEffect(() => {
         if (trashData.length > 0) {
-            const binNames = trashData.map(bin => bin.nama); // Extracting bin names
-            const binLocation = trashData.map(bin => bin.location); // Extracting bin names
-            Notifications.scheduleNotificationAsync({
-                content: {
-                    title: "Smart Trash Bin",
-                    body: `${binNames.join(', '), binLocation} bins already full.` // Joining bin names with comma
-                },
-                trigger: null, // Change this to the desired trigger
-            });
+            const latestData = JSON.stringify(trashData);
+            if (latestData !== lastNotified) {
+                const binNames = trashData.map(bin => bin.nama); // Extracting bin names
+                const binLocations = trashData.map(bin => bin.location); // Extracting bin locations
+                Notifications.scheduleNotificationAsync({
+                    content: {
+                        title: "Smart Trash Bin",
+                        body: `${binNames.join(', ')}, located at ${binLocations.join(', ')}, are full.`
+                    },
+                    trigger: null, // Trigger immediately
+                });
+                setLastNotified(latestData); // Update the last notification data
+            }
         }
     }, [trashData]);
 
@@ -125,7 +151,10 @@ function HomeScreen() {
                     <Card style={{ width: '89%', marginTop: '3%'}}>
                         <Card.Content>
                             <View style={{  flexDirection: 'row', justifyContent: 'flex-start', gap: 200}}>
-                                <Text variant="bodyMedium"><Text style={{ fontWeight: '800' }}>{bin.nama}</Text> |{bin.level} {bin.location}</Text>
+                                <Text variant="bodyMedium">
+                                    <Text style={{ fontWeight: '800' }}>{bin.nama}
+                                    </Text> |{bin.level} {bin.location}
+                                </Text>
                             </View>
                         </Card.Content>
                     </Card>
@@ -134,5 +163,4 @@ function HomeScreen() {
         </View>
     );
 }
-
 export default HomeScreen;
