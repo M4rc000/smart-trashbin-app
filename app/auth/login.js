@@ -5,7 +5,6 @@ import { Button } from '@rneui/themed';
 import { TextInput } from 'react-native-paper'; 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import authStyles from '../styles/authStyles.js';
-import apiUrl from './../api';
 
 const welcomeScreen = require('../../assets/images/welcomeScreen.png');
 
@@ -42,8 +41,9 @@ export default function Login() {
 
   async function signIn() {
     const userData = { username, password };
+    const urlUser = process.env.EXPO_PUBLIC_API_URLUser;
     try {
-      const response = await fetch(apiUrl.urlUser, {
+      const response = await fetch(urlUser, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -65,7 +65,7 @@ export default function Login() {
         alert('Username or password is incorrect');
       }
     } catch (error) {
-      // console.error('Login failed:', error);
+      alert('Login failed:', error);
       return 'Login failed: ' + error.message;
     }
   }

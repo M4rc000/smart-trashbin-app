@@ -3,7 +3,6 @@ import { router } from 'expo-router';
 import { View, Text, Image, ImageBackground } from 'react-native';
 import authStyles from './styles/authStyles.js';
 import { Button } from '@rneui/themed';
-import {generateSessionToken} from './functions/index';
 
  
 const welcomeScreen = require('./../assets/images/welcomeScreen.png');

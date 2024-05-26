@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Card, SegmentedButtons } from 'react-native-paper';
-import apiUrl from './../api';
 
 const DataScreen = () => {
     const [trashData, setTrashData] = useState([]);
@@ -12,13 +11,13 @@ const DataScreen = () => {
             try {
                 let url = '';
                 if (value === 'full') {
-                    url = apiUrl.urlDataFull;
+                    url = process.env.EXPO_PUBLIC_API_URLDataFull;
                 } else if (value === 'medium') {
-                    url = apiUrl.urlDataMedium;
+                    url = process.env.EXPO_PUBLIC_API_URLDataMedium;
                 } else if (value === 'empty') {
-                    url = apiUrl.urlDataEmpty;
+                    url = process.env.EXPO_PUBLIC_API_URLDataEmpty;
                 } else {
-                    url = apiUrl.urlData;
+                    url = process.env.EXPO_PUBLIC_API_URLData;
                 }
 
                 const response = await fetch(url, {

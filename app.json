@@ -1,9 +1,11 @@
 {
   "expo": {
     "name": "Tong-setan",
-    "slug": "smart-trash-bin",
+    "slug": "tong-setan",
     "version": "1.0.0",
-    "scheme": "Tong-setan",
+    "scheme": [
+      "tong-setan"
+    ],
     "orientation": "portrait",
     "icon": "./assets/images/splash.png",
     "userInterfaceStyle": "light",
@@ -16,17 +18,21 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "tong-setan"
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "foregroundImage": "./assets/images/splash.png",
         "backgroundColor": "#ffffff"
       },
+      "permissions": [
+        "INTERNET"
+      ],
       "package": "com.prime_10.tongsetan"
     },
     "web": {
-      "favicon": "./assets/images/favicon.png"
+      "favicon": "./assets/images/splash.png"
     },
     "plugins": [
       "expo-router",
@@ -46,7 +52,7 @@
         "origin": false
       },
       "eas": {
-        "projectId": "837ba0e0-1180-4418-b0d3-9076e1e0e414"
+        "projectId": "34648d0e-1a65-4eb0-b745-075113e9565c"
       }
     },
     "owner": "prime_10"

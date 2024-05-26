@@ -19,7 +19,7 @@ function ProfileScreen() {
             // Navigate to the home screen or any other desired destination
             router.navigate('/');
         } catch (error) {
-            console.error('Error clearing user session:', error);
+            // console.error('Error clearing user session:', error);
         }
     };
     const [user, setUser] = useState(null);
@@ -31,10 +31,10 @@ function ProfileScreen() {
                     const parsedUser = JSON.parse(userSession);
                     setUser(parsedUser);
                 } else {
-                    console.log('User session not found');
+                    // console.log('User session not found');
                 }
             } catch (error) {
-                console.error('Error retrieving user session:', error);
+                // console.error('Error retrieving user session:', error);
             }
         };
         getUserSession();
@@ -96,7 +96,7 @@ function ProfileScreen() {
                         <Dialog.Title>About</Dialog.Title>
                         <Dialog.Content>
                             <Text>Smart Trash Bin</Text>
-                            <Text variant="bodyMedium">version 0.0.1</Text>
+                            <Text variant="bodyMedium">version 1.0.0</Text>
                         </Dialog.Content>
                         <Dialog.Actions>
                             <Button onPress={hideAboutDialog}>Close</Button>

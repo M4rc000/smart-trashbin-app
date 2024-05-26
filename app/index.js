@@ -23,7 +23,7 @@ export default function Index() {
   }, []);
 
   if(!user || user == NULL || user == ''){
-    return <Redirect href={'./auth/login'} />
+    return <Redirect href={'welcome'} />
   }
   else{
     return <Redirect href={'./home'} />

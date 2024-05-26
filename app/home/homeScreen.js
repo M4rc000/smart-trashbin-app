@@ -1,15 +1,13 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, Platform } from 'react-native';
 import { Card } from 'react-native-paper';
 import homeStyles from '../styles/homeStyles';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import capitalizeFirstLetter from '../functions';
-import apiUrl from './../api';
 import * as Notifications from 'expo-notifications';
 import * as Device from 'expo-device';
 import Constants from 'expo-constants';
-
 
 function HomeScreen() {
     const styles = homeStyles();  
@@ -17,11 +15,12 @@ function HomeScreen() {
     const [trashData, setTrashData] = useState([]);
     const [lastNotified, setLastNotified] = useState(null); // Track the last notification
     const [user, setUser] = useState(null);
+    const urlDataNotifFull = process.env.EXPO_PUBLIC_API_URLDataNotifFull;
 
     useEffect(() => {
         const getDataTrash = async () => {
             try {
-                const response = await fetch(apiUrl.urlDataNotifFull, {
+                const response = await fetch(urlDataNotifFull, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -31,13 +30,13 @@ function HomeScreen() {
 
                 if (!response.ok) {
                     const errorText = await response.text();
-                    throw new Error(`Network response was not ok: ${errorText}`);
+                    // throw new Error(`Network response was not ok: ${errorText}`);
                 }
 
                 const resJson = await response.json();
                 setTrashData(resJson);
             } catch (error) {
-                console.error('Error getting data:', error);
+                // console.error('Error getting data:', error);
             }
         };
 
@@ -54,10 +53,10 @@ function HomeScreen() {
                     const parsedUser = JSON.parse(userSession);
                     setUser(parsedUser);
                 } else {
-                    console.log('User session not found');
+                    // console.log('User session not found');
                 }
             } catch (error) {
-                console.error('Error retrieving user session:', error);
+                // console.error('Error retrieving user session:', error);
             }
         };
         getUserSession();
@@ -97,12 +96,12 @@ function HomeScreen() {
             try {
                 const projectId = Constants.expoConfig?.extra?.eas?.projectId;
                 if (!projectId) {
-                    throw new Error('Project ID is not defined in the app configuration.');
+                    // throw new Error('Project ID is not defined in the app configuration.');
                 }
                 token = (await Notifications.getExpoPushTokenAsync({ projectId })).data;
                 // console.log(token);
             } catch (error) {
-                console.error('Error encountered while fetching Expo token:', error);
+                // console.error('Error encountered while fetching Expo token:', error);
             }
         } else {
             alert('Must use physical device for Push Notifications');
